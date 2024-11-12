@@ -1,7 +1,17 @@
-Captain - [@annextation ]([https://github.com/annextation]) 
-Creating mazes:
-Random walk method - [@ArtyomV11]([https://github.com/ArtyomV11])
-The Prima Method - [@celicaaa]([https://github.com/celicaaa])
-Pathfinding:
-A deep search algorithm - [@Fedor-ctrlc-ctrlv]([https://github.com/Fedor-ctrlc-ctrlv])
-Dijkstra's algorithm - [@valera148]([https://github.com/valera148])
+# Проект "Создание лабиринтов и Поиск пути"
+
+## Участники
+
+- **Капитан**: [@annextation](https://github.com/annextation)
+
+### Создание лабиринтов
+- **Метод случайного блуждания**: [@ArtyomV11](https://github.com/ArtyomV11)
+- **Метод Прима**: [@celicaaa](https://github.com/celicaaa)
+
+### Алгоритмы поиска пути
+- **Глубокий поиск**: [@Fedor-ctrlc-ctrlv](https://github.com/Fedor-ctrlc-ctrlv)
+- **Алгоритм Дейкстры**: [@valera148](https://github.com/valera148)
+
+## Описание
+
+В этом проекте мы занимаемся созданием лабиринтов и разработкой алгоритмов для поиска путей в них. Используя различные методики, мы стремимся сделать процесс не только эффективным, но и увлекательным.
