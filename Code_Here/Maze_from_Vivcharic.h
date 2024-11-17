@@ -1,41 +1,31 @@
-#include <iostream>
+#pragma once
 #include <vector>
-#include <fstream>
+#include <string>
+#include <queue>
+#include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <string>
 #include <algorithm>
-#include <utility>
-#include <chrono>
 #include <climits>
-#include <queue>
-#include <tuple>
+#include <fstream>
 
 const char Stena = '#';
 const char Put = ' ';
 
-class Maze {
-public:
-    Maze(int size);
-    void generate();
-    void display() const;
-    void saveToFile(const std::string& filename) const;
-    bool findShortestPathDFS1(int startX, int startY, int endX, int endY, std::vector<std::pair<int, int>>& path);
-    int calculatePathLength1(const std::vector<std::pair<int, int>>& path);
-    bool findShortestPathDijkstra(int startX, int startY, int endX, int endY, std::vector<std::pair<int, int>>& path);
-    int calculatePathDijkstraLength1(const std::vector<std::pair<int, int>>& path);
-
-
-
-
-private:
+// Структура для лабиринта
+struct Maze {
     int size;
     std::vector<std::vector<char>> labyrinth;
-    bool inBounds(int x, int y) const;
-    void createPath(int x, int y);
-    bool dfs1(int x, int y, int endX, int endY, std::vector<std::pair<int, int>>& path, std::vector<std::vector<bool>>& visited);
-
-
 };
 
-
+// Функции для работы с лабиринтом
+void generateMaze(Maze& maze);
+bool inBounds(const Maze& maze, int x, int y);
+void displayMaze(const Maze& maze);
+void saveMazeToFile(const Maze& maze, const std::string& filename);
+bool dfs(Maze& maze, int x, int y, int endX, int endY, std::vector<std::vector<bool>>& visited, std::vector<std::pair<int, int>>& path);
+void createPath(Maze& maze, int x, int y);
+bool findShortestPathDFS(Maze& maze, int startX, int startY, int endX, int endY, std::vector<std::pair<int, int>>& path);
+int calculatePathLength(const std::vector<std::pair<int, int>>& path);
+bool findShortestPathDijkstra(Maze& maze, int startX, int startY, int endX, int endY, std::vector<std::pair<int, int>>& path);
+int calculatePathDijkstraLength(const std::vector<std::pair<int, int>>& path);
