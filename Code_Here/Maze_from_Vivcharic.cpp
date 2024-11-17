@@ -1,76 +1,62 @@
 #include "Maze_from_Vivcharic.h"
 
-using namespace std;
 
 const int dx[] = { 2, 0, -2, 0 };
 const int dy[] = { 0, 2, 0, -2 };
 
-Maze::Maze(int size) : size(size), labyrinth(size, vector<char>(size, Stena)) {
-    srand(static_cast<unsigned>(time(0))); // Инициализация генератора случайных чисел
+void generateMaze(Maze& maze) {
+    maze.labyrinth.assign(maze.size, std::vector<char>(maze.size, Stena));
+    createPath(maze, 1, 1);
+    maze.labyrinth[0][1] = Put;  // Вход
+    maze.labyrinth[maze.size - 1][maze.size - 2] = Put;  // Выход
 }
 
-bool Maze::inBounds(int x, int y) const {
-    return x >= 0 && x < size && y >= 0 && y < size;
-}
-
-
-void Maze::createPath(int x, int y) {
-    labyrinth[x][y] = Put;
-    vector<int> directions = { 0, 1, 2, 3 };
+void createPath(Maze& maze, int x, int y) {
+    maze.labyrinth[x][y] = Put;
+    std::vector<int> directions = { 0, 1, 2, 3 };
 
     // Перемешиваем направления для случайного блуждания
     for (int i = directions.size() - 1; i > 0; --i) {
         int j = rand() % (i + 1);
-        swap(directions[i], directions[j]);
+        std::swap(directions[i], directions[j]);
     }
 
     for (int dir : directions) {
         int newX = x + dx[dir];
         int newY = y + dy[dir];
-        if (inBounds(newX, newY) && labyrinth[newX][newY] == Stena) {
-            labyrinth[x + dx[dir] / 2][y + dy[dir] / 2] = Put;
-            createPath(newX, newY);
+        if (inBounds(maze, newX, newY) && maze.labyrinth[newX][newY] == Stena) {
+            maze.labyrinth[x + dx[dir] / 2][y + dy[dir] / 2] = Put;
+            createPath(maze, newX, newY);
         }
     }
 }
 
-void Maze::generate() {
-    /*auto start = std::chrono::high_resolution_clock::now();*/  // Начало замера времени
-
-    labyrinth.assign(size, vector<char>(size, Stena));
-    createPath(1, 1);
-    labyrinth[0][1] = Put; // Вход
-    labyrinth[size - 1][size - 2] = Put; // Выход
-
-    //auto end = std::chrono::high_resolution_clock::now();  // Конец замера времени
-    //std::chrono::duration<double> duration = end - start;  // Вычисляем длительность
-    //std::cout << "Vremya generacii labirinta: " << duration.count() << " sekund." << std::endl;
+bool inBounds(const Maze& maze, int x, int y) {
+    return x >= 0 && x < maze.size && y >= 0 && y < maze.size;
 }
 
-
-void Maze::display() const {
-    for (const auto& row : labyrinth) {
+void displayMaze(const Maze& maze) {
+    for (const auto& row : maze.labyrinth) {
         for (char cell : row) {
-            cout << cell;
+            std::cout << cell;
         }
-        cout << endl;
+        std::cout << std::endl;
     }
 }
 
-void Maze::saveToFile(const string& filename) const {
-    ofstream outFile(filename);
+void saveMazeToFile(const Maze& maze, const std::string& filename) {
+    std::ofstream outFile(filename);
     if (outFile.is_open()) {
-        for (const auto& row : labyrinth) {
+        for (const auto& row : maze.labyrinth) {
             for (char cell : row) {
                 outFile << cell;
             }
-            outFile << endl;
+            outFile << std::endl;
         }
         outFile.close();
-        cout << "Labirint sohraneny v fail: " << filename << endl;
+        std::cout << "Labirint sohraneny v fail: " << filename << std::endl;
     }
     else {
-        cerr << "Ne udalos' otkryt' fail dlya zapisi." << endl;
+        std::cerr << "Ne udalos' otkryt' fail dlya zapisi." << std::endl;
     }
 }
-
