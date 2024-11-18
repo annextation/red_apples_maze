@@ -1,18 +1,12 @@
-#include "Maze_from_Astrahankina.h"
 #include <iostream>
 #include <vector>
-#include <cstdlib>
-#include <ctime>
-#include <algorithm>
 #include <queue>
-#include <stack>
-#include <chrono>
+#include <algorithm>
 #include <climits>
+#include <chrono>
 
 using namespace std;
 
-
-// РћРїСЂРµРґРµР»РµРЅРёРµ СЃС‚СЂСѓРєС‚СѓСЂС‹ Node РґР»СЏ Р°Р»РіРѕСЂРёС‚РјР° Р”РµР№РєСЃС‚СЂС‹
 struct Node {
     int x, y, dist;
     bool operator>(const Node& other) const {
@@ -20,12 +14,18 @@ struct Node {
     }
 };
 
-// Р РµР°Р»РёР·Р°С†РёСЏ Р°Р»РіРѕСЂРёС‚РјР° Р”РµР№РєСЃС‚СЂС‹
-bool Maze1::findShortestPathDijkstra(int startX, int startY, int endX, int endY, vector<pair<int, int>>& path) {
+// Проверка, находится ли точка в пределах лабиринта
+bool inBounds(int x, int y, int size) {
+    return x >= 0 && y >= 0 && x < size && y < size;
+}
+
+// Реализация алгоритма Дейкстры
+bool findShortestPathDijkstra(const vector<vector<int>>& maze, int size, int wallValue,
+    int startX, int startY, int endX, int endY, vector<pair<int, int>>& path) {
     auto start = chrono::high_resolution_clock::now();
 
     vector<vector<int>> dist(size, vector<int>(size, INT_MAX));
-    dist[startY][startX] = 0;
+    dist[startX][startY] = 0;
 
     priority_queue<Node, vector<Node>, greater<Node>> pq;
     pq.push({ startX, startY, 0 });
@@ -33,23 +33,19 @@ bool Maze1::findShortestPathDijkstra(int startX, int startY, int endX, int endY,
     vector<vector<pair<int, int>>> parent(size, vector<pair<int, int>>(size, { -1, -1 }));
 
     const int dx[] = { 0, 1, 0, -1 };
-    const int dy[] = { -1, 0, 1, 0 };
+    const int dy[] = { 1, 0, -1, 0 };
 
     while (!pq.empty()) {
         Node current = pq.top();
         pq.pop();
 
-        int x = current.x;
-        int y = current.y;
+        int x = current.x, y = current.y;
 
         if (x == endX && y == endY) {
-            // Р’РѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµРј РїСѓС‚СЊ
+            // Восстанавливаем путь
             while (x != startX || y != startY) {
                 path.push_back({ x, y });
-                int px = parent[y][x].first;
-                int py = parent[y][x].second;
-                x = px;
-                y = py;
+                tie(x, y) = parent[x][y];
             }
             path.push_back({ startX, startY });
             reverse(path.begin(), path.end());
@@ -57,26 +53,30 @@ bool Maze1::findShortestPathDijkstra(int startX, int startY, int endX, int endY,
             auto end = chrono::high_resolution_clock::now();
             chrono::duration<double> duration = end - start;
             cout << "Dijkstra: " << duration.count() * 1000 << " ms." << endl;
-            cout << "Steps: " << path.size() << endl;
+
             return true;
         }
 
-        // РСЃСЃР»РµРґСѓРµРј СЃРѕСЃРµРґРµР№
         for (int i = 0; i < 4; ++i) {
             int newX = x + dx[i];
             int newY = y + dy[i];
 
-            if (inBounds(newX, newY) && maze[newY][newX] != Wall) {
-                int newDist = dist[y][x] + 1;
+            if (inBounds(newX, newY, size) && maze[newX][newY] != wallValue) {
+                int newDist = dist[x][y] + 1;
 
-                if (newDist < dist[newY][newX]) {
-                    dist[newY][newX] = newDist;
-                    parent[newY][newX] = { x, y };
+                if (newDist < dist[newX][newY]) {
+                    dist[newX][newY] = newDist;
+                    parent[newX][newY] = { x, y };
                     pq.push({ newX, newY, newDist });
                 }
             }
         }
     }
 
-    return false; // РџСѓС‚СЊ РЅРµ РЅР°Р№РґРµРЅ
+    return false; // Путь не найден
+}
+
+// Подсчёт длины пути
+int calculatePathLength(const vector<pair<int, int>>& path) {
+    return path.size() - 1;
 }
