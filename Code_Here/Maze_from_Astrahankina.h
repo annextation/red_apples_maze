@@ -25,6 +25,6 @@ bool findShortestPathDijkstra(Maze1& maze, int startX, int startY, int endX, int
 bool findShortestPathDFS(Maze1& maze, int startX, int startY, int endX, int endY, std::vector<std::pair<int, int>>& path);
 void printMazeWithPath(const Maze1& maze, const std::vector<std::pair<int, int>>& path);
 bool dfs(Maze1& maze, int x, int y, int endX, int endY, std::vector<std::pair<int, int>>& path, std::vector<std::vector<bool>>& visited);
-bool findShortestPathDFS1(Maze1& maze, int startX, int startY, int endX, int endY, std::vector<std::pair<int, int>>& path);
+bool findShortestPathDijkstra1(Maze1& maze, int startX, int startY, int endX, int endY, std::vector<std::pair<int, int>>& path);
 void printMazeWithPath1(const Maze1& maze, const std::vector<std::pair<int, int>>& path);
-bool dfs1(Maze1& maze, int x, int y, int endX, int endY, std::vector<std::pair<int, int>>& path, std::vector<std::vector<bool>>& visited);
+bool Dijkstra1(Maze1& maze, int x, int y, int endX, int endY, std::vector<std::pair<int, int>>& path, std::vector<std::vector<bool>>& visited);
