@@ -1,10 +1,11 @@
-#include <iostream>
+LLP#include <iostream>
 #include <vector>
 #include <queue>
 #include <algorithm>
 #include <climits>
 #include <chrono>
-
+#include "Maze_from_Astrahankina.h"
+#include "Maze_from_Vivcharik.h"
 using namespace std;
 
 struct Node {
@@ -14,12 +15,11 @@ struct Node {
     }
 };
 
-// Проверка, находится ли точка в пределах лабиринта
+
 bool inBounds(int x, int y, int size) {
     return x >= 0 && y >= 0 && x < size && y < size;
 }
 
-// Реализация алгоритма Дейкстры
 bool findShortestPathDijkstra(const vector<vector<int>>& maze, int size, int wallValue,
     int startX, int startY, int endX, int endY, vector<pair<int, int>>& path) {
     auto start = chrono::high_resolution_clock::now();
@@ -42,7 +42,7 @@ bool findShortestPathDijkstra(const vector<vector<int>>& maze, int size, int wal
         int x = current.x, y = current.y;
 
         if (x == endX && y == endY) {
-            // Восстанавливаем путь
+           
             while (x != startX || y != startY) {
                 path.push_back({ x, y });
                 tie(x, y) = parent[x][y];
@@ -73,10 +73,8 @@ bool findShortestPathDijkstra(const vector<vector<int>>& maze, int size, int wal
         }
     }
 
-    return false; // Путь не найден
-}
+    return false;
 
-// Подсчёт длины пути
 int calculatePathLength(const vector<pair<int, int>>& path) {
     return path.size() - 1;
 }
