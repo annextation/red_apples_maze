@@ -1,21 +1,20 @@
 #include "Maze_from_Vivcharic.h"
 
-
 const int dx[] = { 2, 0, -2, 0 };
 const int dy[] = { 0, 2, 0, -2 };
 
 void generateMaze(Maze& maze) {
     maze.labyrinth.assign(maze.size, std::vector<char>(maze.size, Stena));
     createPath(maze, 1, 1);
-    maze.labyrinth[0][1] = Put;  // Вход
-    maze.labyrinth[maze.size - 1][maze.size - 2] = Put;  // Выход
+    maze.labyrinth[0][1] = Put;  
+    maze.labyrinth[maze.size - 1][maze.size - 2] = Put;  
 }
 
 void createPath(Maze& maze, int x, int y) {
     maze.labyrinth[x][y] = Put;
     std::vector<int> directions = { 0, 1, 2, 3 };
 
-    // Перемешиваем направления для случайного блуждания
+   
     for (int i = directions.size() - 1; i > 0; --i) {
         int j = rand() % (i + 1);
         std::swap(directions[i], directions[j]);
