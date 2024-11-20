@@ -17,7 +17,7 @@ bool inBounds(const Maze1& maze, int x, int y) {
 std::vector<std::pair<int, int>> getNeighbours(const Maze1& maze, int x, int y) {
     std::vector<std::pair<int, int>> neighbours;
 
-    // Рассматриваем 4 направления
+
     const int dx[] = { 0, 2, 0, -2 };
     const int dy[] = { -2, 0, 2, 0 };
 
@@ -37,39 +37,38 @@ std::vector<std::pair<int, int>> getNeighbours(const Maze1& maze, int x, int y) 
 void generateMazePrim(Maze1& maze) {
     srand(static_cast<unsigned int>(time(0)));
 
-    // Список стен
+
     std::vector<std::pair<int, int>> walls;
 
     maze.grid[0][1] = Path;
     maze.grid[maze.size - 1][maze.size - 2] = Path;
 
-    // Начальная точка
+    
     int x = rand() % maze.size;
     int y = rand() % maze.size;
 
-    // Приведение координат к нечётным значениям
     x = x % 2 == 0 ? x + 1 : x;
     y = y % 2 == 0 ? y + 1 : y;
 
     maze.grid[y][x] = Path;
 
-    // Добавляем соседние стены
+    
     for (const auto& neighbour : getNeighbours(maze, x, y)) {
         walls.push_back(neighbour);
     }
 
     while (!walls.empty()) {
-        // Выбираем случайную стену
+        
         int index = rand() % walls.size();
         int wx = walls[index].first;
         int wy = walls[index].second;
         walls.erase(walls.begin() + index);
 
-        // Проверяем, можно ли сделать проход через эту стену
+        
         int dx = 0, dy = 0;
 
-        if (wx % 2 == 1 && wy % 2 == 0) dy = 1;  // Вертикальная стена
-        else if (wx % 2 == 0 && wy % 2 == 1) dx = 1; // Горизонтальная стена
+        if (wx % 2 == 1 && wy % 2 == 0) dy = 1;  
+        else if (wx % 2 == 0 && wy % 2 == 1) dx = 1;
         else continue;
 
         int nx = wx + dx;
@@ -78,8 +77,7 @@ void generateMazePrim(Maze1& maze) {
         int ny2 = wy - dy;
 
         if (inBounds(maze, nx, ny) && inBounds(maze, nx2, ny2) && maze.grid[ny][nx] != maze.grid[ny2][nx2]) {
-            maze.grid[wy][wx] = Path; // Убираем стену
-
+            maze.grid[wy][wx] = Path;
             if (maze.grid[ny][nx] == Wall) {
                 maze.grid[ny][nx] = Path;
                 for (const auto& neighbour : getNeighbours(maze, nx, ny)) {
@@ -109,4 +107,3 @@ void printMaze(const Maze1& maze) {
         std::cout << '\n';
     }
 }
-
