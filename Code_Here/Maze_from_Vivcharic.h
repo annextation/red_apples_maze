@@ -12,13 +12,13 @@
 const char Stena = '#';
 const char Put = ' ';
 
-// Структура для лабиринта
+
 struct Maze {
     int size;
     std::vector<std::vector<char>> labyrinth;
 };
 
-// Функции для работы с лабиринтом
+
 void generateMaze(Maze& maze);
 bool inBounds(const Maze& maze, int x, int y);
 void displayMaze(const Maze& maze);
